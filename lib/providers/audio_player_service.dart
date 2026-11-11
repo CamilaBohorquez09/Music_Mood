@@ -1,19 +1,30 @@
+import 'dart:async';
 
 import 'package:just_audio/just_audio.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AudioPlayerService {
   final AudioPlayer player = AudioPlayer();
 
   String? currentUrl;
 
-  // Reproducir un fragmento de audio
   Future<void> play(String url) async {
     try {
-      //currentUrl = url;
+      currentUrl = url;
+
+      if(!kIsWeb||player.audioSource==null){
+        await player.setUrl(url);
+      }else{
+        await player.clearAudioSources();
+        await player.addAudioSource(AudioSource.uri(Uri.parse(url)));
+        await player.load();
+      }
 
       await player.setUrl(url);
       await player.play();
+
     } catch (e) {
+      currentUrl=null;
       throw Exception('No se pudo reproducir la canción: $e');
     }
   }
