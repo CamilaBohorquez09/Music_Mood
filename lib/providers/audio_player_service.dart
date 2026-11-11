@@ -9,7 +9,7 @@ class AudioPlayerService {
   // Reproducir un fragmento de audio
   Future<void> play(String url) async {
     try {
-      currentUrl = url;
+      //currentUrl = url;
 
       await player.setUrl(url);
       await player.play();
